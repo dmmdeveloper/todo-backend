@@ -48,7 +48,7 @@ const Register = asyncHandler( async (req,res )=>{
 
  const {name ,email , password } = req.body;
 
-const avatar = req.file.path
+const avatar = "../../public/temp/madhuri-dixit_166745939050.jpg"
 
 if(!avatar){
     Response(res, "avatar is Required :)" , null ,401 )
