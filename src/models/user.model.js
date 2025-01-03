@@ -61,7 +61,7 @@ userSchema.methods.generateToken = async function () {
         {
             _id : this._id,
     },
-    "FGDfdgtertgBXFDGHXREtDfgDSFxcvXVNhtsyDfGXCVbwa4%345^46&w34WQ3@46$%756UY^%&^5%TGFHgfdXbnghTYUtyxcv",
+    process.env.TOKEN_SECRET,
     {
         expiresIn : "10d"
     }

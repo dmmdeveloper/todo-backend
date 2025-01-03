@@ -81,8 +81,6 @@ if(findUser){
 }
 
 
-
-
 const createUser = await User.create({
     name , email ,password ,avatar : "https://upload.wikimedia.org/wikipedia/commons/f/fa/Allah3.svg"
 });
@@ -90,6 +88,14 @@ const createUser = await User.create({
  const token =  await generateToken(createUser._id)
 
 const RegisteredUser = await User.findById(createUser._id).select("-password")
+
+if(RegisteredUser){
+    // sendMail
+}else{
+    Response(res , "Error When Uer Creation " , null , 401)
+    throw new APIError("Error When User Creation")
+}
+
 
 const options  = {
     httpOnly : true, 
