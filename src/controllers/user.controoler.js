@@ -48,18 +48,13 @@ const Register = asyncHandler( async (req,res )=>{
 
  const {name ,email , password } = req.body;
 
-const avatar = "../../public/temp/madhuri-dixit_166745939050.jpg"
 
-if(!avatar){
-    Response(res, "avatar is Required :)" , null ,401 )
-    throw new APIError("avatar is Required:)" , 402)
-}
 
 const requiredFields = ["name"  , "email" , "password"]
 for(let field of requiredFields){
 
     if(!req.body[field]){
-        unlinkSync(avatar)
+        // unlinkSync(avatar)
         Response(res, `${field} is Required :)`, null , 402)
         throw new APIError(`${field} is Required :)` , 403)
     }
@@ -72,7 +67,7 @@ const zodVaidation = userSchema.safeParse({email ,password})
 if(!zodVaidation.success){
     const zodmsg  = zodVaidation.error.errors.map((z)=>z.message);
     // console.log(zodmsg);
-    unlinkSync(avatar)
+    // unlinkSync(avatar)
     Response(res ,zodmsg.toString(), null , 402 )
     throw new APIError(zodmsg.toString() , 401)
 }
@@ -81,17 +76,15 @@ const findUser = await User.findOne({email})
 
 if(findUser){
     Response(res , "User Already Exists :) , Try Another Email" , null , 400)
-    unlinkSync(avatar)
+    // unlinkSync(avatar)
     throw new APIError("User Areaady Exits", 400)
 }
 
 
 
-const avatarURL = await uploadOnCloudinary(avatar)
-console.log("URL : ", avatarURL);
 
 const createUser = await User.create({
-    name , email ,password ,avatar : avatarURL
+    name , email ,password ,avatar : "https://upload.wikimedia.org/wikipedia/commons/f/fa/Allah3.svg"
 });
 
  const token =  await generateToken(createUser._id)
