@@ -5,7 +5,7 @@ import { dbName } from "../constants.js";
 export const DBConnection = async ()=>{
     try {
         console.log(chalk.yellow("\t\t\t DataBase Connecting............"));
-        const db = await mongoose.connect(`${process.env.DB_URL}/${dbName}`);
+        const db = await mongoose.connect(`mongodb+srv://dostmm:dostmm@cluster0.zwozj.mongodb.net/${dbName}`);
         console.log(chalk.bgGreen(" ** Data Base Connected Success Fully !!"));
         console.log("Host : ", db.connection.host);
         console.log("Name : ", db.connection.name);

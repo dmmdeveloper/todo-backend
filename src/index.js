@@ -3,7 +3,7 @@ import { DBConnection } from "./db/connection.db.js";
 import dotenv from "dotenv"
 
 dotenv.config({path:".env"})
-const port = process.env.PORT;
+const port = 2000;
 
 DBConnection()
 .then( ()=>{
