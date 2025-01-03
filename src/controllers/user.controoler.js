@@ -2,7 +2,7 @@ import { APIREsponse } from "../utils/apiresponse.utils.js";
 import { asyncHandler } from "../utils/asynhandler.utils.js";
 
 
-const Register = asyncHandler( ( )=>{
+const Register = asyncHandler( (req,res )=>{
     console.log(req.url);
 
 

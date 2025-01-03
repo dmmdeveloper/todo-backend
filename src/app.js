@@ -14,13 +14,14 @@ app.use(cors());
 
 
 // Routes importing
-
+import userRouter from "./routes/user.routes.js";
 
 
 // Routes Declaration
-
-app.use("/" , `<h1> Hello Dost Muhammad Hi!</h1>`)
-
+app.get("/" , (req,res)=>{
+    res.send(`<h1> Hello Dear Dost Muhammad Malhoo </h1>`)
+})
+app.use("/user", userRouter)
 
 
 export default app;
