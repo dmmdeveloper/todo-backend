@@ -8,6 +8,7 @@ import { uploadOnCloudinary } from "../utils/uploadonCloudinary.utils.js";
 
 
 const generateToken = async (userID)=>{
+
 try {
     
         const findUser = await User.findById(userID)
@@ -23,15 +24,13 @@ try {
 
 }
 
-
 const userSchema = z.object({
     email : z.string().email( { message:"Invalid Email Address"}),
     password : z.string().min(6 , { message : "Password at least 6 characters"})
 })
 
-
-
 const Register = asyncHandler( async (req,res )=>{
+
     console.log(req.url);
 
 
@@ -120,4 +119,64 @@ const options  = {
     )
 })
 
-export {Register}
+
+const Login  = asyncHandler ( async (req  , res) =>{
+    console.log(req.url);
+
+    // get data 
+    // empty validation
+    // findUser
+    // check password - compare 
+    // token
+    // return res - cookie
+
+const  {email , password } = req.body;
+console.log(email , password);
+
+const requiredFields = ["email", "password"]
+
+for( let field of requiredFields){
+    if(!req.body[field]){
+        Response(res , `${field} is Required :))`, null , 400)
+        throw new APIError(`${field} is Requied :)`, 400)
+    }
+}
+
+const findUser = await User.findOne({email})
+// console.log(findUser);
+
+if(!findUser){
+    Response(res, "User Not Registered" , null , 400)
+    throw new APIError("User Not Regitered " , 400)
+}
+
+
+const isPasswordValid = await findUser.isPasswordCorrect(password)
+console.log(isPasswordValid);
+
+
+if(!isPasswordValid){
+    Response(res ,"Invalid Password :)", null , 400)
+    throw new APIError("Invalid Password" , 400 )
+}
+
+
+const token = await generateToken (findUser?._id)
+console.log(token);
+
+const LoggedInUser = await User.findById(findUser?._id).select("-password")
+
+
+    res
+    .status(200)
+    .cookie("jwt",token)
+    .json(
+        new APIREsponse("User Logged In Success Fully !!!" , LoggedInUser,200 ) 
+    )
+})
+
+
+
+
+
+export { Register  , Login  }
