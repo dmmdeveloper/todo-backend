@@ -166,7 +166,6 @@ console.log(token);
 
 const LoggedInUser = await User.findById(findUser?._id).select("-password")
 
-
     res
     .status(200)
     .cookie("jwt",token)
@@ -176,7 +175,29 @@ const LoggedInUser = await User.findById(findUser?._id).select("-password")
 })
 
 
+const changeMode = asyncHandler(  async (req ,res) =>{
+    console.log(req.url);
+const mode = req.body.mode;
+
+const chnagedProfile = await User.findByIdAndUpdate(req?.user?._id , { 
+mode
+}
+     , { new :true} ).select("-password") ;//;; 
+
+    res
+    .status(200)
+    .json(
+        new APIREsponse("User Mode Changed :))" , chnagedProfile, 200 )
+    )    
+})
 
 
+const profile = asyncHandler(async (req , res)=>{
+    console.log(req.url);
 
-export { Register  , Login  }
+res.status(200)
+.json(
+    new APIREsponse("User Fetched Success Fully !!" , req.user  ,200 )
+)
+})
+export { Register  , Login , changeMode , profile}

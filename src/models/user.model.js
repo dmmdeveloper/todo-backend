@@ -2,7 +2,10 @@ import mongoose from "mongoose"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 
+
 const userSchema = new mongoose.Schema( {
+
+
 name:{
     type:String ,
     lowercase : true,
@@ -25,8 +28,9 @@ avatar:{
 },
 token : String,
 mode: {
+
     type:String ,
-    enum : ["collection" , "general"],
+    enum    : ["collection" , "general"],
     default : "general"
 }
 
