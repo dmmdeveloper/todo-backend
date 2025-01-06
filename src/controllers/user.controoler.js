@@ -47,8 +47,8 @@ const Register = asyncHandler( async (req,res )=>{
     // send res.profile-cookie();
 
  const {name ,email , password } = req.body;
- const avatar =  req?.file?.path || null;
-//  console.log(avatar);
+ const avatar =  req.file?.path;
+ console.log( "Avatar", avatar);
  
 
 if(!avatar){
@@ -84,11 +84,10 @@ const findUser = await User.findOne({email})
 if(findUser){
     Response(res , "User Already Exists :) , Try Another Email" , null , 400)
     unlinkSync(avatar)
-    throw new APIError(` User Already Exists`, 400)
+    throw new APIError(` User Already Exists ${findUser} `, 400)
 }
 const avatarURL = await uploadOnCloudinary(avatar)
 console.log("URL" , avatarURL);
-
 
 const imagePlaceholder  = name.trim().slice(0,1).toUpperCase()
 
