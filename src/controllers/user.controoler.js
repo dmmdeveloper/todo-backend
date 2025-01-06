@@ -47,14 +47,21 @@ const Register = asyncHandler( async (req,res )=>{
     // send res.profile-cookie();
 
  const {name ,email , password } = req.body;
+ const avatar =  req?.file?.path || null;
+//  console.log(avatar);
+ 
+
+if(!avatar){
+    Response(res , "Avatar is Required :)"  , null , 400 )
+    throw new APIError("Avatar is Required :))" , 400)
+}
 
 
-
-const requiredFields = ["name"  , "email" , "password"]
+const requiredFields = ["name"  , "email" , "password" ]
 for(let field of requiredFields){
 
     if(!req.body[field]){
-        // unlinkSync(avatar)
+        unlinkSync(avatar)
         Response(res, `${field} is Required :)`, null , 402)
         throw new APIError(`${field} is Required :)` , 403)
     }
@@ -64,25 +71,29 @@ for(let field of requiredFields){
 const zodVaidation = userSchema.safeParse({email ,password})
 // console.log(zodVaidation);
 
-if(!zodVaidation.success){
-    const zodmsg  = zodVaidation.error.errors.map((z)=>z.message);
-    // console.log(zodmsg);
-    // unlinkSync(avatar)
-    Response(res ,zodmsg.toString(), null , 402 )
-    throw new APIError(zodmsg.toString() , 401)
-}
+// if(!zodVaidation.success){
+//     const zodmsg  = zodVaidation.error.errors.map((z)=>z.message);
+//     console.log(zodmsg);
+//     unlinkSync(avatar)
+//     Response(res ,zodmsg.toString(), null , 402 )
+//     throw new APIError(zodmsg.toString() , 401)
+// }
 
 const findUser = await User.findOne({email})
 
 if(findUser){
     Response(res , "User Already Exists :) , Try Another Email" , null , 400)
-    // unlinkSync(avatar)
-    throw new APIError("User Areaady Exits", 400)
+    unlinkSync(avatar)
+    throw new APIError(` User Already Exists`, 400)
 }
+const avatarURL = await uploadOnCloudinary(avatar)
+console.log("URL" , avatarURL);
 
+
+const imagePlaceholder  = name.trim().slice(0,1).toUpperCase()
 
 const createUser = await User.create({
-    name , email ,password ,avatar : "https://upload.wikimedia.org/wikipedia/commons/f/fa/Allah3.svg"
+    name , email ,password ,avatar : avatarURL
 });
 
  const token =  await generateToken(createUser._id)

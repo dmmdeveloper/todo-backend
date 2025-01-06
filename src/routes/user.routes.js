@@ -6,6 +6,6 @@ import { upload } from "../middlewares/upload.middleware.js";
 const userRouter = Router();
 
 
-userRouter.route("/register").post( upload.none(), Register)
+userRouter.route("/register").post( upload.single("avatar"), Register)
 
 export default userRouter;
