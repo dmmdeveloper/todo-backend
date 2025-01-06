@@ -12,7 +12,8 @@ app.use(express.static("public"));
 app.use(cookieParser());
 app.use(cors({
 
-    origin:"http://localhost:5173",
+    // origin:"http://localhost:5173",
+    origin:"https://todo-henna-psi.vercel.app",
 credentials:true,
 methods :["POST" , "GET" , "DELETE"]
 }));
