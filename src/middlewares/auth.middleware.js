@@ -10,7 +10,7 @@ export const verifyJWT  = asyncHandler( async (req , res  ,next ) =>{
 
     try {
         
-    const token = req.cookies?.jwt;
+    const token = req.cookies?.token;
     
     if(!token){
         Response(res, "unAuthorized Request :))", null , 404 )
