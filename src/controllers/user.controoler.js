@@ -180,6 +180,35 @@ const options = {
     )
 })
 
+const Logout  = asyncHandler ( async (req , res)=>{
+    console.log(req.url);
+
+console.log(req.user);
+
+// update token id Db = ""
+// crerCookie 
+
+const logOutUser = await User.findByIdAndUpdate(req?.user?._id  , {
+    $unset :{
+        token : ""
+    }
+}  , { new : true})
+
+
+const options = {
+    httpOnly: true , 
+    secure : true
+}
+
+    res
+    .status(200)
+    .clearCookie("jwt" , options)
+    .json(
+        new APIREsponse("User Logout Success Fully !!" , { } , 200)  
+    )
+    
+})
+
 
 const changeMode = asyncHandler(  async (req ,res) =>{
     console.log(req.url);
@@ -206,4 +235,4 @@ res.status(200)
     new APIREsponse("User Fetched Success Fully !!" , req.user  ,200 )
 )
 })
-export { Register  , Login , changeMode , profile}
+export { Register  , Login , changeMode , profile , Logout }
