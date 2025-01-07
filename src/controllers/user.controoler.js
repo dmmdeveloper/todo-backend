@@ -174,7 +174,8 @@ const options = {
         secure: true,   // Ensures cookies are only sent over HTTPS
         sameSite: 'Strict', // Restricts cookie to same-site requests
         path: '/',      // Makes the cookie available throughout the site
-        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days expiry
+        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days expiry
+       domain :"https://todo-henna-psi.vercel.app"
     };
     res
     .status(200)
