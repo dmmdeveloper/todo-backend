@@ -172,6 +172,7 @@ const options = {
         sameSite :"none",
         maxAge: 7 * 24 * 60 * 60 * 1000, // Cookie lifespan (1 week)
     };
+
     res
     .status(200)
     .cookie("jwt",token ,options)

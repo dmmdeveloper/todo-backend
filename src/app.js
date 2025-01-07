@@ -21,6 +21,7 @@ methods :["POST" , "GET" , "DELETE"]
 
 // Routes importing
 import userRouter from "./routes/user.routes.js";
+import todoRouter from "./routes/todo.routes.js";
 
 
 // Routes Declaration
@@ -28,6 +29,6 @@ app.get("/" , (req,res)=>{
     res.send(`<h1> Hello Dear Dost Muhammad Malhoo </h1>`)
 })
 app.use("/user", userRouter)
-
+app.use("/todo"  , todoRouter)
 
 export default app;
