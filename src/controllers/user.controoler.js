@@ -113,7 +113,7 @@ const options  = {
 }
 
     res.status(200)
-    .cookie("jwt", token)
+    .cookie("jwt", token ,options )
     .json(
         new APIREsponse(" User Registered Success Fuly !!" , RegisteredUser , 201  )
     )
@@ -121,6 +121,7 @@ const options  = {
 
 
 const Login  = asyncHandler ( async (req  , res) =>{
+
     console.log(req.url);
 
     // get data 
@@ -166,9 +167,14 @@ console.log(token);
 
 const LoggedInUser = await User.findById(findUser?._id).select("-password")
 
+const options ={
+    httpOnly:true ,
+    secure :true
+}
+
     res
     .status(200)
-    .cookie("jwt",token)
+    .cookie("jwt",token ,options)
     .json(
         new APIREsponse("User Logged In Success Fully !!!" , LoggedInUser,200 ) 
     )
