@@ -105,12 +105,13 @@ if(RegisteredUser){
     throw new APIError("Error When User Creation")
 }
 
-
-const options  = {
-    httpOnly : true, 
-    secure : true
-
-}
+const options = {
+    httpOnly: true, // Prevent access via client-side scripts
+    secure: true,   // Ensures cookies are only sent over HTTPS
+    sameSite: 'Strict', // Restricts cookie to same-site requests
+    path: '/',      // Makes the cookie available throughout the site
+    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days expiry
+};
 
     res.status(200)
     .cookie("jwt", token ,options )
@@ -121,6 +122,7 @@ const options  = {
 
 
 const Login  = asyncHandler ( async (req  , res) =>{
+
 
     console.log(req.url);
 
@@ -167,11 +169,13 @@ console.log(token);
 
 const LoggedInUser = await User.findById(findUser?._id).select("-password")
 
-const options ={
-    httpOnly:true ,
-    secure :true
-}
-
+const options = {
+        httpOnly: true, // Prevent access via client-side scripts
+        secure: true,   // Ensures cookies are only sent over HTTPS
+        sameSite: 'Strict', // Restricts cookie to same-site requests
+        path: '/',      // Makes the cookie available throughout the site
+        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days expiry
+    };
     res
     .status(200)
     .cookie("jwt",token ,options)
