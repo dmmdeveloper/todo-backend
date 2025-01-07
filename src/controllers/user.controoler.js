@@ -168,10 +168,11 @@ const token = await generateToken (findUser?._id)
 console.log(token);
 
 const LoggedInUser = await User.findById(findUser?._id).select("-password")
-
 const options = {
         httpOnly: true, 
         secure: true,   
+        sameSite :"none",
+        maxAge: 7 * 24 * 60 * 60 * 1000, // Cookie lifespan (1 week)
     };
     res
     .status(200)
