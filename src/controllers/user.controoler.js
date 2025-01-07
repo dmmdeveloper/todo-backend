@@ -33,7 +33,6 @@ const Register = asyncHandler( async (req,res )=>{
 
     console.log(req.url);
 
-
     // get data -- text
     // get file 
     // empty validation
@@ -106,11 +105,10 @@ if(RegisteredUser){
 }
 
 const options = {
-    httpOnly: true, // Prevent access via client-side scripts
-    secure: true,   // Ensures cookies are only sent over HTTPS
-    sameSite: 'Strict', // Restricts cookie to same-site requests
-    path: '/',      // Makes the cookie available throughout the site
-    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days expiry
+    httpOnly: true, 
+    secure: true,   
+    sameSite :"none",
+    maxAge: 7 * 24 * 60 * 60 * 1000, // Cookie lifespan (1 week)
 };
 
     res.status(200)
