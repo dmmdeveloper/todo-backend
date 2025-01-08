@@ -32,9 +32,10 @@ const create = asyncHandler ( async ( req , res)=>{
 
 
 const todos = asyncHandler( async (req , res) =>{
+
     // console.log(req.url);
-    const todos = await Todo.find();
     // console.log(todos);
+    const todos = await Todo.find().sort({ createdAt: -1 });
 
     res.status(200)
     .json(
