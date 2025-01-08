@@ -7,6 +7,6 @@ const todoRouter = Router();
 todoRouter.route("/create").post( verifyJWT, create);
 todoRouter.route("/todos").get( verifyJWT, todos)
 todoRouter.route("/delete/:id").delete(verifyJWT ,  deleteTodo)
-todoRouter.route("/update").post(update)
+todoRouter.route("/update/:id").post( verifyJWT, update)
 
 export default todoRouter;

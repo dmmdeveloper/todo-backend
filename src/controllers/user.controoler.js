@@ -155,13 +155,10 @@ if(!findUser){
 const isPasswordValid = await findUser.isPasswordCorrect(password)
 console.log(isPasswordValid);
 
-
 if(!isPasswordValid){
     Response(res ,"Invalid Password :)", null , 400)
     throw new APIError("Invalid Password" , 400 )
 }
-
-
 const token = await generateToken (findUser?._id)
 console.log(token);
 
