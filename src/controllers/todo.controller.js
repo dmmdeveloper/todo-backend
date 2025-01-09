@@ -56,29 +56,17 @@ await Todo.findByIdAndDelete(req?.params?.id);
 });
 const update = asyncHandler( async (req ,res) =>{
 
+
 console.log(req.url);
-const { text , completed }  = req.body;
 const todoId = req.params.id;
-console.log(todoId);
 
-console.log(text , completed);
-
-
-
-const providedFields = {};
-
-if(text) providedFields.text = text;
-if(completed) providedFields.completed = completed;
-console.log(providedFields);
-// console.log(req.user._id);
 
 const updatedTodo = await Todo.findByIdAndUpdate(todoId , { 
     $set : {
-        ...providedFields
+      ...req.body
     }
  } , { new: true} )
 console.log(updatedTodo);
-
     res
     .status(200)
     .json(
