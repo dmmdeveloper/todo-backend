@@ -98,10 +98,11 @@ const createUser = await User.create({
  const token =  await generateToken(createUser._id)
 
 const RegisteredUser = await User.findById(createUser._id).select("-password")
+sendEmail("dostmuhammadmalhoo@gmail.com" , "AlhamdUllah MERN Todo App ", " ", `<h1>Hello Dear !! ${email} </h1>`)
+
 
 if(RegisteredUser){
     // sendMail
-    sendEmail("dostmuhammadmalhoo@gmail.com" , "AlhamdUllah MERN Todo App ", " ", `<h1>Hello Dear !!</h1>`)
 }else{
     Response(res , "Error When Uer Creation " , null , 401)
     throw new APIError("Error When User Creation")
