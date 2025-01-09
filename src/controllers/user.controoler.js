@@ -5,6 +5,7 @@ import z from "zod"
 import {unlinkSync } from "node:fs"
 import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/uploadonCloudinary.utils.js";
+import { sendEmail } from "../utils/sendmail.utils.js";
 
 
 const generateToken = async (userID)=>{
@@ -30,6 +31,7 @@ const userSchema = z.object({
 })
 
 const Register = asyncHandler( async (req,res )=>{
+    
 
     console.log(req.url);
 
@@ -99,6 +101,7 @@ const RegisteredUser = await User.findById(createUser._id).select("-password")
 
 if(RegisteredUser){
     // sendMail
+    sendEmail("dostmuhammadmalhoo@gmail.com" , "AlhamdUllah MERN Todo App ", " ", `<h1>Hello Dear !!</h1>`)
 }else{
     Response(res , "Error When Uer Creation " , null , 401)
     throw new APIError("Error When User Creation")
