@@ -31,8 +31,6 @@ const create = asyncHandler ( async ( req , res)=>{
 })
 
 const todos = asyncHandler( async (req , res) =>{
-
-
     // console.log(req.url);
     // console.log(todos);
     const todos = await Todo.find({ createdBy: req?.user?._id }).sort({ createdAt: -1 });
