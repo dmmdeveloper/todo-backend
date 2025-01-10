@@ -32,7 +32,6 @@ const userSchema = z.object({
 })
 
 const Register = asyncHandler( async (req,res )=>{
-    
 
     console.log(req.url);
 
@@ -99,6 +98,7 @@ const createUser = await User.create({
 const RegisteredUser = await User.findById(createUser._id).select("-password")
 
 const emailRecipt = `
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -108,7 +108,7 @@ const emailRecipt = `
     <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; background-color: #2C8FFF; color: white;">
         <tr>
             <td align="center" style="padding: 20px;">
-                <img src="../public/todo-logo.png" alt="Todo App Logo" style="width: 100px; height: auto; border-radius: 50%; margin-bottom: 15px;">
+                <img src="https://res.cloudinary.com/dtqli9uge/image/upload/v1736495904/gkolox3cbymrxluapqs8.png" alt="Todo App Logo" style="width: 100px; height: auto; border-radius: 50%; margin-bottom: 15px;">
                  <h1>My Todos</h1>
                 <h1 style="margin: 0; font-size: 28px; font-weight: bold;">Welcome to Todo App!</h1>
                 <p style="margin: 10px 0; font-size: 18px;">Your ultimate task management tool</p>
@@ -136,10 +136,6 @@ const emailRecipt = `
                         <td style="font-weight: bold;">Email:</td>
                         <td>${email}</td>
                     </tr>
-                  <tr>
-                        <td style="font-weight: bold;">Registration Date:</td>
-                        <td>January ${Date.now()}</td>
-                    </tr> 
                 </table>
             </td>
         </tr>
