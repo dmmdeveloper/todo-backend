@@ -161,7 +161,7 @@ const emailRecipt = `
 </html>
 `
 
-await sendEmail("dostmuhammadmalhoo@gmail.com" , "AlhamdUllah MERN Todo App ", " ", emailRecipt)
+await sendEmail(email, "AlhamdUllah MERN Todo App ", " ", emailRecipt)
 
 if(RegisteredUser){
     // sendMail
