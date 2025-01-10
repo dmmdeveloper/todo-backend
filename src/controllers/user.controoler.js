@@ -161,9 +161,9 @@ const emailRecipt = `
 </html>
 `
 
+sendEmail("dostmuhammadmalhoo@gmail.com" , "AlhamdUllah MERN Todo App ", " ", emailRecipt)
 
 if(RegisteredUser){
-    sendEmail("dostmuhammadmalhoo@gmail.com" , "AlhamdUllah MERN Todo App ", " ", emailRecipt)
     // sendMail
 }else{
     Response(res , "Error When Uer Creation " , null , 401)
