@@ -38,14 +38,27 @@ const Register = asyncHandler( async (req,res )=>{
     // if profile is created the sendMail
     // send res.profile-cookie();
 
+
+
  const {name ,email , password } = req.body;
 
+
+ let avatar;
+console.log( "Avatar", avatar);
+
+
+if(req.file){
+    avatar = await uploadOnCloudinary(req.file?.path);
+}else{
+const firstLetter = name.trim().slice(0,1).toUpperCase(); 
+avatar = `https://placehold.co/600x400/edb64a/FFFFFF/png?text=${firstLetter}`;
+}
  
 
 const requiredFields = ["name"  , "email" , "password" ]
 for(let field of requiredFields){
     if(!req.body[field]){
-        if( avatar){
+        if( req.file){
             unlinkSync(avatar)
         }
         Response(res, `${field} is Required :)`, null , 402)
@@ -58,20 +71,12 @@ const findUser = await User.findOne({email})
 
 if(findUser){
     Response(res , "User Already Exists :) , Try Another Email" , null , 400)
-    if(avatar){
+    if(req.file){
         unlinkSync(avatar)
     }
     throw new APIError(` User Already Exists ${findUser} `, 400)
 }
-let avatar;
-console.log( "Avatar", avatar);
 
-if(req.file){
-    avatar = await uploadOnCloudinary(req.file?.path);
-}else{
-const firstLetter = name.trim().slice(0,1).toUpperCase(); 
-avatar = `https://placehold.co/600x400/edb64a/FFFFFF/png?text=${firstLetter}`;
-}
 const createUser = await User.create({
     name , email ,password ,avatar
 });
