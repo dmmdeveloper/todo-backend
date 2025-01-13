@@ -1,12 +1,10 @@
 import { APIError } from "../utils/apierror.utils.js";
 import { APIREsponse, Response } from "../utils/apiresponse.utils.js";
 import { asyncHandler } from "../utils/asynhandler.utils.js";
-import z from "zod"
 import {unlinkSync , readFile } from "node:fs"
 import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/uploadonCloudinary.utils.js";
 import { sendEmail } from "../utils/sendmail.utils.js";
-import path from "node:path";
 
 
 const generateToken = async (userID)=>{
@@ -26,15 +24,9 @@ try {
 
 }
 
-const userSchema = z.object({
-    email : z.string().email( { message:"Invalid Email Address"}),
-    password : z.string().min(6 , { message : "Password at least 6 characters"})
-})
 
 const Register = asyncHandler( async (req,res )=>{
-
     console.log(req.url);
-
     // get data -- text
     // get file 
     // empty validation
@@ -47,57 +39,49 @@ const Register = asyncHandler( async (req,res )=>{
     // send res.profile-cookie();
 
  const {name ,email , password } = req.body;
- const avatar =  req.file?.path;
- console.log( "Avatar", avatar);
+
  
-
-if(!avatar){
-    Response(res , "Avatar is Required :)"  , null , 400 )
-    throw new APIError("Avatar is Required :))" , 400)
-}
-
 
 const requiredFields = ["name"  , "email" , "password" ]
 for(let field of requiredFields){
-
     if(!req.body[field]){
-        unlinkSync(avatar)
+        if( avatar){
+            unlinkSync(avatar)
+        }
         Response(res, `${field} is Required :)`, null , 402)
         throw new APIError(`${field} is Required :)` , 403)
     }
 }
 
-
-const zodVaidation = userSchema.safeParse({email ,password})
-// console.log(zodVaidation);
-
-// if(!zodVaidation.success){
-//     const zodmsg  = zodVaidation.error.errors.map((z)=>z.message);
-//     console.log(zodmsg);
-//     unlinkSync(avatar)
-//     Response(res ,zodmsg.toString(), null , 402 )
-//     throw new APIError(zodmsg.toString() , 401)
-// }
-
 const findUser = await User.findOne({email})
+
 
 if(findUser){
     Response(res , "User Already Exists :) , Try Another Email" , null , 400)
-    unlinkSync(avatar)
+    if(avatar){
+        unlinkSync(avatar)
+    }
     throw new APIError(` User Already Exists ${findUser} `, 400)
 }
-const avatarURL = await uploadOnCloudinary(avatar)
-console.log("URL" , avatarURL);
+let avatar;
+console.log( "Avatar", avatar);
 
+if(req.file){
+    avatar = await uploadOnCloudinary(req.file?.path);
+}else{
+const firstLetter = name.trim().slice(0,1).toUpperCase(); 
+avatar = `https://placehold.co/600x400/edb64a/FFFFFF/png?text=${firstLetter}`;
+}
 const createUser = await User.create({
-    name , email ,password ,avatar : avatarURL
+    name , email ,password ,avatar
 });
 
- const token =  await generateToken(createUser._id)
+const token =  await generateToken(createUser._id)
 
 const RegisteredUser = await User.findById(createUser._id).select("-password")
 
 const emailRecipt = `
+
 
 <!DOCTYPE html>
 <html>
@@ -160,7 +144,6 @@ const emailRecipt = `
 </body>
 </html>
 `
-
 await sendEmail(email, "AlhamdUllah MERN Todo App ", " ", emailRecipt)
 
 if(RegisteredUser){

@@ -23,9 +23,7 @@ password:{
     required : true,
 },
 avatar:{
-    type:String ,
-    required : true,
-},
+    type:String },
 token : String,
 mode: {
 
@@ -36,10 +34,6 @@ mode: {
 
 
 } , { timestamps:true});
-
-
-
-
 
 
 // hash the password
