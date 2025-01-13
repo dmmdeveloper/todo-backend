@@ -46,7 +46,6 @@ const Register = asyncHandler( async (req,res )=>{
  let avatar;
 console.log( "Avatar", avatar);
 
-
 if(req.file){
     avatar = await uploadOnCloudinary(req.file?.path);
 }else{
