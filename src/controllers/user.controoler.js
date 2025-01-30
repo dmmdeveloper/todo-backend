@@ -43,8 +43,20 @@ const Register = asyncHandler( async (req,res )=>{
  const {name ,email , password } = req.body;
 
 
+ const requiredFields = ["name"  , "email" , "password" ]
+ for(let field of requiredFields){
+     if(!req.body[field]){
+         Response(res, `${field} is Required :)`, null , 402)
+         throw new APIError(`${field} is Required :)` , 403)
+     }
+ }
+ 
+
+
  let avatar;
 console.log( "Avatar", avatar);
+
+
 
 if(req.file){
     avatar = await uploadOnCloudinary(req.file?.path);
@@ -53,17 +65,6 @@ const firstLetter = name.trim().slice(0,1).toUpperCase();
 avatar = `https://placehold.co/600x400/edb64a/FFFFFF/png?text=${firstLetter}`;
 }
  
-
-const requiredFields = ["name"  , "email" , "password" ]
-for(let field of requiredFields){
-    if(!req.body[field]){
-        if( req.file){
-            unlinkSync(avatar)
-        }
-        Response(res, `${field} is Required :)`, null , 402)
-        throw new APIError(`${field} is Required :)` , 403)
-    }
-}
 
 const findUser = await User.findOne({email})
 
@@ -217,6 +218,7 @@ const token = await generateToken (findUser?._id)
 console.log(token);
 
 const LoggedInUser = await User.findById(findUser?._id).select("-password")
+
 const options = {
         httpOnly: true, 
         secure: true,   

@@ -6,7 +6,7 @@ import os from "node:os"
 
 const storage = multer.diskStorage({
     destination : function (req , _ , cb) {
-        const tmpDir  = os.tmpdir()
+        const tmpDir  = os.tmpdir();
         cb(null , tmpDir)        
     },
     filename : function (req , file , cb) {
