@@ -289,4 +289,47 @@ res.status(200)
     new APIREsponse("User Fetched Success Fully !!" , req.user  ,200 )
 )
 })
-export { Register  , Login , changeMode , profile , Logout }
+
+const updateProfile = asyncHandler ( async (req , res) =>{
+    console.log(req.url);
+    // get id from re.user?._id;
+    // get Data text - data
+    // get img
+    // upload on cloudinary
+    // create object of providedFileds
+    // destruce in the finByIdAndUpdate()
+    // resturn res
+
+console.log(req?.user?._id);
+const  { name , email , password } = req.body; 
+// newProfile
+console.log("Files" , req.file);
+
+let  avatar;
+if(req.file){
+    avatar = await uploadOnCloudinary( req.file.path); 
+    
+}else{
+    avatar=null;
+}
+
+const findUser = await User.findById(req?.user?._id);
+
+if(name) findUser.name = name;
+if(email) findUser.email = email ;
+if(password) findUser.password = password;
+if(avatar) findUser.avatar = avatar;
+
+
+
+const savedUse = await findUser.save();
+
+res
+    .status(200)
+    .json(
+        new APIREsponse("Profile Updated Success Fully !!" ,savedUse , 201)
+    )  
+})
+
+
+export { Register  , Login , changeMode , profile , Logout , updateProfile}
