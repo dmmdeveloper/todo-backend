@@ -36,11 +36,12 @@ const createCollection = asyncHandler(async (req, res) => {
 // Fetch All Collection collection.find();
 
 const collections = asyncHandler(async (req, res) => {
+  
 
   const allCollections = await Collection
-    .find
-    // { _id : req.user?._id}
-    ().sort({createdAt : -1});
+    .find(
+    { _id : req.user?._id}
+    ).sort({createdAt : -1});
 
   res
     .status(200)
