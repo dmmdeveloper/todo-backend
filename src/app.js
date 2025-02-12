@@ -12,23 +12,26 @@ app.use(express.static("public"));
 app.use(cookieParser());
 app.use(cors({
 
-    // origin:"http://localhost:5173",
-    origin:"https://todo-henna-psi.vercel.app",
+    origin:"http://localhost:5173",
+    // origin:"https://todo-henna-psi.vercel.app",
 credentials:true,
-methods :["POST" , "GET" , "DELETE"]
+methods :["POST" , "GET" , "DELETE" , "PUT"]
 }));
-
 
 // Routes importing
 import userRouter from "./routes/user.routes.js";
 import todoRouter from "./routes/todo.routes.js";
+import collectionRouter from "./routes/collection.routes.js";
+import collectionTodoRouter from "./routes/collectionTodos.routes.js";
 
 
 // Routes Declaration
 app.get("/" , (req,res)=>{
     res.send(`<h1> Hello Dear Dost Muhammad Malhoo </h1>`)
 })
-app.use("/user", userRouter)
-app.use("/todo"  , todoRouter)
+app.use("/user", userRouter);
+app.use("/todo"  , todoRouter);
+app.use("/collection" ,collectionRouter);
+app.use("/collection/todo"  ,collectionTodoRouter);
 
 export default app;

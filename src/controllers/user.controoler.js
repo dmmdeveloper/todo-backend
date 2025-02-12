@@ -6,7 +6,6 @@ import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/uploadonCloudinary.utils.js";
 import { sendEmail } from "../utils/sendmail.utils.js";
 
-
 const generateToken = async (userID)=>{
 
 try {
