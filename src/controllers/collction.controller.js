@@ -5,6 +5,7 @@ import { APIREsponse } from "../utils/apiresponse.utils.js";
 import { asyncHandler } from "../utils/asynhandler.utils.js";
 
 const createCollection = asyncHandler(async (req, res) => {
+
   console.log(req.url);
 
   const { name } = req.body;
@@ -36,13 +37,12 @@ const createCollection = asyncHandler(async (req, res) => {
 // Fetch All Collection collection.find();
 
 const collections = asyncHandler(async (req, res) => {
+  console.log(req?.user._id);
   
-
   const allCollections = await Collection
     .find(
-    { _id : req.user?._id}
+    { createdBy : req.user?._id}
     ).sort({createdAt : -1});
-
   res
     .status(200)
     .json(
