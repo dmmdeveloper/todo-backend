@@ -130,9 +130,11 @@ const updateCollectionTodo = asyncHandler(async (req, res) => {
     .status(200)
     .json(new APIREsponse("Collection Todo Updated !", updatedTodo, 200));
 });
+
 const collectionTodosSortBy = asyncHandler(async (req, res) => {
   console.log(req.url);
   console.log(req.params);
+
   const { collectionId, order } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(collectionId)) {
@@ -140,39 +142,61 @@ const collectionTodosSortBy = asyncHandler(async (req, res) => {
     throw new APIError("Invalid Collection Id", 400);
   }
 
-  if (order !== "oldest" && order !== "newest") {
+  const findCollection = await Collection.findById(collectionId)
 
-    res
-      .status(400)
-      .json(
-        new APIREsponse("Invalid Order. Order must be 'oldest' or 'newest'", {}, 400)
-      );
-    throw new APIError("Invalid Order. Order must be 'oldest' or 'newest'", 400);
+  // Fetch todos from the database
+  let todos = findCollection?.todos;
+
+  if (!todos || todos.length === 0) {
+    res.status(404).json(new APIREsponse("No Todos found", {}, 404));
+    throw new APIError("No Todos found", 404);
   }
 
-  const findCollection = await Collection.findById(collectionId);
-  console.log(findCollection.todos);
+  // **Sorting Logic Based on the 'order' Parameter**
+  switch (order) {
+    case "completedFirst":
+      todos.sort((a, b) => b.completed - a.completed);
+      break;
 
-  if (!findCollection) {
-  
-    res.status(400).json(new APIREsponse("Collection Not Found :)", {}, 400));
-    throw new APIError(" Collection Not Found :)", 400);
+    case "uncompletedFirst":
+      todos.sort((a, b) => a.completed - b.completed);
+      break;
+
+    case "newestFirst":
+      todos.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      break;
+
+    case "oldestFirst":
+      todos.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+      break;
+
+    case "newestCompletedFirst":
+      todos.sort((a, b) => b.completed - a.completed || new Date(b.createdAt) - new Date(a.createdAt));
+      break;
+
+    case "oldestCompletedFirst":
+      todos.sort((a, b) => b.completed - a.completed || new Date(a.createdAt) - new Date(b.createdAt));
+      break;
+
+    case "newestUncompletedFirst":
+      todos.sort((a, b) => a.completed - b.completed || new Date(b.createdAt) - new Date(a.createdAt));
+      break;
+
+    case "oldestUncompletedFirst":
+      todos.sort((a, b) => a.completed - b.completed || new Date(a.createdAt) - new Date(b.createdAt));
+      break;
+
+    default:
+      res
+        .status(400)
+        .json(new APIREsponse("Invalid Order. Choose a valid sorting order.", {}, 400));
+      throw new APIError("Invalid Order. Choose a valid sorting order.", 400);
   }
 
-  findCollection.todos = findCollection.todos.sort((a, b) => {
-  return order === "oldest"
-    ? new Date(a.createdAt) - new Date(b.createdAt) // Oldest to Newest
-    : new Date(b.createdAt) - new Date(a.createdAt); // Newest to Oldest
-  });
+await findCollection.save();
 
-const sortedCollection = await findCollection.save();
-
-
-  res
-    .status(200)
-    .json(new APIREsponse(`Collection Todos Soterd In {order}`,sortedCollection, 200));
+  res.status(200).json(new APIREsponse(`Collection Todos Sorted In ${order}`, { todos }, 200));
 });
-
 
 const deleteAllCollectionTodos = asyncHandler(async (req , res)=>{
   console.log(req.url);

@@ -200,13 +200,38 @@ const collectionSortBy = asyncHandler ( async (req , res)=>{
 
 
 
-
   res
   .status(200)
   .json(
     new APIREsponse(` Collection Order In {order}` , {}, 200)
   )
-} )
+})
+
+const totalTodos = asyncHandler( async (req , res)=>{
+  console.log(req.url);
+
+  const collections = await Collection.find({createdBy : req?.user?._id});
+  const totalCollections = collections.length;
+  const objectsInCollections = collections.reduce((acc, item) => acc + item.todos.length, 0);  
+  const trueObjecs = collections.flatMap(item => item.todos).filter(todo => todo.completed === true).length;
+  const falseObjecs = collections.flatMap(item => item.todos).filter(todo => !todo.completed === true).length;
+  
+
+
+  res
+  .status(200)
+  .json(
+    new APIREsponse(`Total Todos Are Fetched :))`,{
+      collections : totalCollections,
+      totalObjects : objectsInCollections,
+      trueObject : trueObjecs,
+      falseObjects: falseObjecs
+    },200)
+  )
+} ) 
+
+
+
 
 
 export {
@@ -216,5 +241,7 @@ export {
   deleteCollection,
   completedCollection,
   unCompletedCollection,
-  singleCollection
+  singleCollection,
+  collectionSortBy,
+  totalTodos
 };

@@ -24,7 +24,6 @@ import todoRouter from "./routes/todo.routes.js";
 import collectionRouter from "./routes/collection.routes.js";
 import collectionTodoRouter from "./routes/collectionTodos.routes.js";
 
-
 // Routes Declaration
 app.get("/" , (req,res)=>{
     res.send(`<h1> Hello Dear Dost Muhammad Malhoo </h1>`)
